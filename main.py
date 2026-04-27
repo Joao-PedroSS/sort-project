@@ -58,6 +58,25 @@ def testar_todos_algoritmos(algoritmos, vetores):
 
     return resultado
 
+def imprimir_tabela_cruzada(dados):
+    # Pega todos os nomes de testes (usando o primeiro algoritmo como base)
+    testes = [nome if nome else "Caso X" for nome, _ in dados[0][1]]
+
+    # Cabeçalho
+    print("\n\n")
+    header = ["Algoritmo"] + testes
+    print(" | ".join(f"{h:<18}" for h in header))
+    print("-" * (20 * len(header)))
+
+    # Linhas
+    for nome_alg, resultados in dados:
+        linha = [nome_alg]
+
+        for nome_teste, tempo in resultados:
+            linha.append(f"{tempo:.2f}")
+
+        print(" | ".join(f"{col:<18}" for col in linha))
+
 # Lista de algoritmos
 algoritmos = [
     ("Bubble Sort", bubble_sort),
@@ -82,6 +101,5 @@ vetores = [
 
 # Execução
 result = testar_todos_algoritmos(algoritmos, vetores)
-for r in result:
-    print("\n")
-    print(r)
+
+imprimir_tabela_cruzada(result)
