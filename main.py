@@ -2,7 +2,7 @@ import numpy as np
 import time 
 from numpy import random as rd
 
-from algorithms.bubble_sort import bubble_sort
+from algorithms.radix_sort import radix_sort
 from algorithms.insertion_sort import insertion_sort
 from algorithms.selection_sort import selection_sort
 from algorithms.quick_sort import quick_sort
@@ -79,7 +79,7 @@ def imprimir_tabela_cruzada(dados):
 
 # Lista de algoritmos
 algoritmos = [
-    ("Bubble Sort", bubble_sort),
+    ("Bubble Sort", radix_sort),
     ("Insertion Sort", insertion_sort),
     ("Selection Sort", selection_sort),
     ("Quick Sort", quick_sort),
