@@ -1,7 +1,6 @@
-# Como Executar
+# Sort Project
 
-Caso não tenha a lib **'Pygame'** instalada rode
-``` pip install pygame ``` ou ``` py -m pip install pygame ```
+Este é um projeto sobre diferentes algoritmos sorts, contendo testes unitários Big(O) e etc
 
-Então utilize 
-``` py main.py ```
+Algoritmos atualmente implementados:
+- Nenhum
