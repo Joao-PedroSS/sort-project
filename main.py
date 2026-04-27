@@ -1,7 +1,12 @@
 import numpy as np
 from numpy import random as rd
 
-from .algorithms import bubble_sort, insertion_sort, selection_sort, quick_sort, merge_sort, shell_sort
+from algorithms.bubble_sort import bubble_sort
+from algorithms.insertion_sort import insertion_sort
+from algorithms.selection_sort import selection_sort
+from algorithms.quick_sort import quick_sort
+from algorithms.merge_sort import merge_sort
+from algorithms.shell_sort import shell_sort
 
 #Vetores de teste
 vetor1 = np.array([8, 5, 1, 7, 9, 4, 10, 3, 6, 2])
