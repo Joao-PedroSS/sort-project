@@ -1,4 +1,5 @@
 import numpy as np
+import time 
 from numpy import random as rd
 
 from algorithms.bubble_sort import bubble_sort
@@ -34,12 +35,28 @@ def testar_algoritmo(nome, algoritmo, vetor):
 
 # Função para testar tudo
 def testar_todos_algoritmos(algoritmos, vetores):
+    resultado = []
+
+    inicio = 0
+    fim = 0
     for nome_alg, func_alg in algoritmos:
         print(f"\n=== {nome_alg} ===\n")
-        
-        for i, vetor in enumerate(vetores, start=1):
-            print(f"Teste {i}:")
+        tempoVetor = []
+
+        for nome_vetor, vetor in vetores:
+            print(f"Teste {nome_vetor}:")
+            inicio = time.time()
+
             testar_algoritmo(nome_alg, func_alg, vetor)
+            
+            fim = time.time()
+            tempo = round((fim - inicio) * 1000, 2)
+
+            tempoVetor.append((nome_vetor, tempo))
+
+        resultado.append((nome_alg, tempoVetor))
+
+    return resultado
 
 # Lista de algoritmos
 algoritmos = [
@@ -53,15 +70,18 @@ algoritmos = [
 
 # Lista de vetores
 vetores = [
-    vetor1,
-    vetor2,
-    vetor3,
-    vetor4,
-    vetor5,
-    vetor6,
-    vetor7,
-    vetor8
+    ("Aleatório curto", vetor1),
+    ("Ordenado", vetor2),
+    ("Decrescente", vetor3),
+    ("", vetor4),
+    ("Vazio", vetor5),
+    ("Um valor", vetor6),
+    ("Repetidos", vetor7),
+    ("Aleatório longo", vetor8)
 ]
 
 # Execução
-testar_todos_algoritmos(algoritmos, vetores)
+result = testar_todos_algoritmos(algoritmos, vetores)
+for r in result:
+    print("\n")
+    print(r)
