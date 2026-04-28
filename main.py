@@ -1,6 +1,7 @@
-import numpy as np
 import time 
-from numpy import random as rd
+import csv
+import os
+print(os.getcwd())
 
 from algorithms.radix_sort import radix_sort
 from algorithms.insertion_sort import insertion_sort
@@ -9,29 +10,32 @@ from algorithms.quick_sort import quick_sort
 from algorithms.merge_sort import merge_sort
 from algorithms.shell_sort import shell_sort
 
+def wrapper_geral(algoritmo):
+    def executar(arr):
+        if len(arr) > 0:
+            algoritmo(arr, 0, len(arr) - 1)
+    return executar
+
+def carregar_csv(caminho):
+    vetores = {}
+
+    with open(caminho, newline='') as f:
+        reader = csv.DictReader(f)
+
+        # Inicializa listas para cada coluna
+        for col in reader.fieldnames:
+            vetores[col] = []
+
+        # Lê os dados
+        for linha in reader:
+            for col in reader.fieldnames:
+                if linha[col] != "":
+                    vetores[col].append(int(linha[col]))
+
+    return vetores
+
 #Vetores de teste
-vetor1 = np.array([8, 5, 1, 7, 9, 4, 10, 3, 6, 2])
-vetor2 = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-vetor3 = np.array([10, 9, 8, 7, 6, 5, 4, 3, 2, 1])
-vetor4 = np.array([8, 5, 1, 7, 9, 4, 10, 3, 6, 2, 8, 5, 1])
-vetor5 = np.array([])
-vetor6 = np.array([5])
-vetor7 = np.array([6, 9, 6, 7, 6, 5, 6, 6, 2, 6])
-vetor8 = rd.randint(0, 1000, 100)
-
-#Função para testar individual 
-def testar_algoritmo(nome, algoritmo, vetor):
-    arr = vetor.copy()
-    
-    print(f"{nome}")
-    print("Entrada: ", vetor)
-    
-    if len(arr) > 0:
-        algoritmo(arr, 0, len(arr) - 1)
-    
-    print("Saída:  ", arr)
-    print("-" * 40)
-
+dados_csv = carregar_csv("banco_vetores_random.csv")
 
 # Função para testar tudo
 def testar_todos_algoritmos(algoritmos, vetores):
@@ -45,12 +49,18 @@ def testar_todos_algoritmos(algoritmos, vetores):
 
         for nome_vetor, vetor in vetores:
             print(f"Teste {nome_vetor}:")
-            inicio = time.time()
+            arr = vetor[:]   # cópia segura de lista
 
-            testar_algoritmo(nome_alg, func_alg, vetor)
-            
+            inicio = time.time()
+            func_alg(arr)
             fim = time.time()
+
             tempo = round((fim - inicio) * 1000, 2)
+
+            # Mostra só os primeiros valores pra não travar
+            print("Entrada:", vetor[:10], "...")
+            print("Saída:", arr[:10], "...")
+            print("-" * 40)
 
             tempoVetor.append((nome_vetor, tempo))
 
@@ -59,45 +69,44 @@ def testar_todos_algoritmos(algoritmos, vetores):
     return resultado
 
 def imprimir_tabela_cruzada(dados):
-    # Pega todos os nomes de testes (usando o primeiro algoritmo como base)
-    testes = [nome if nome else "Caso X" for nome, _ in dados[0][1]]
+    # nomes dos testes
+    testes = [nome for nome, _ in dados[0][1]]
 
-    # Cabeçalho
-    print("\n\n")
-    header = ["Algoritmo"] + testes
-    print(" | ".join(f"{h:<18}" for h in header))
-    print("-" * (20 * len(header)))
+    # largura das colunas
+    largura = 12
 
-    # Linhas
+    # cabeçalho
+    print("\n")
+    print(f"{'Algoritmo':<20}", end="")
+    for t in testes:
+        print(f"{t:<{largura}}", end="")
+    print()
+
+    print("-" * (20 + largura * len(testes)))
+
+    # linhas
     for nome_alg, resultados in dados:
-        linha = [nome_alg]
+        print(f"{nome_alg:<20}", end="")
 
-        for nome_teste, tempo in resultados:
-            linha.append(f"{tempo:.2f}")
+        for _, tempo in resultados:
+            print(f"{tempo:<{largura}.2f}", end="")
 
-        print(" | ".join(f"{col:<18}" for col in linha))
+        print()
 
 # Lista de algoritmos
 algoritmos = [
-    ("Bubble Sort", radix_sort),
-    ("Insertion Sort", insertion_sort),
-    ("Selection Sort", selection_sort),
-    ("Quick Sort", quick_sort),
-    ("Shell Sort", shell_sort),
-    ("Merge Sort", merge_sort)
+    ("Radix Sort", wrapper_geral(radix_sort)),
+    ("Insertion Sort", wrapper_geral(insertion_sort)),
+    ("Selection Sort", wrapper_geral(selection_sort)),
+    ("Quick Sort", wrapper_geral(quick_sort)),
+    ("Shell Sort", wrapper_geral(shell_sort)),
+    ("Merge Sort", wrapper_geral(merge_sort))
 ]
 
 # Lista de vetores
-vetores = [
-    ("Aleatório curto", vetor1),
-    ("Ordenado", vetor2),
-    ("Decrescente", vetor3),
-    ("", vetor4),
-    ("Vazio", vetor5),
-    ("Um valor", vetor6),
-    ("Repetidos", vetor7),
-    ("Aleatório longo", vetor8)
-]
+vetores = []
+for nome, lista in dados_csv.items():
+    vetores.append((nome, lista))
 
 # Execução
 result = testar_todos_algoritmos(algoritmos, vetores)
