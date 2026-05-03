@@ -2,6 +2,9 @@
 # Big-O: O(n²) em todos os casos
 
 def selection_sort(arr, left, right):
+    swaps = 0        # trocas reais
+    comparisons = 0  # comparações entre elementos
+
     # Percorre todas as posições
     for i in range(left, right + 1):
         # Assume que o menor é o atual
@@ -9,9 +12,13 @@ def selection_sort(arr, left, right):
 
         # Procura o menor no restante do vetor
         for j in range(i + 1, right + 1):
+            comparisons += 1
             if arr[j] < arr[menor]:
                 menor = j
 
         # Troca o menor encontrado com a posição atual
         if menor != i:
             arr[i], arr[menor] = arr[menor], arr[i]
+            swaps += 1
+
+    return swaps, comparisons

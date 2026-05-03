@@ -2,6 +2,9 @@
 # Big-O: aproximaamente O(n log n) a O(n²)
 
 def shell_sort(arr, left, right):
+    swaps = 0        # trocas lógicas (shifts / writes)
+    comparisons = 0  # comparações entre elementos
+
     # Tamanho do trecho
     n = right - left + 1
 
@@ -19,12 +22,21 @@ def shell_sort(arr, left, right):
             j = i
 
             # Move elementos maiores usando o gap
-            while j >= left + gap and arr[j - gap] > temp:
-                arr[j] = arr[j - gap]
-                j -= gap
+            while j >= left + gap:
+                comparisons += 1
+
+                if arr[j - gap] > temp:
+                    arr[j] = arr[j - gap]
+                    swaps += 1
+                    j -= gap
+                else:
+                    break
 
             # Insere na posição correta
             arr[j] = temp
+            swaps += 1
 
         # Diminui o gap
         gap //= 2
+
+    return swaps, comparisons
