@@ -33,12 +33,13 @@ def carregar_csv(caminho):
         for linha in reader:
             for col in reader.fieldnames:
                 if linha[col] != "":
-                    vetores[col].append(int(linha[col]))
+                    vetores[col].append(int(float(linha[col])))
+
 
     return vetores
 
 
-dados_csv = carregar_csv("banco_vetores_random.csv")
+dados_csv = carregar_csv("banco_dados_ordenacao.csv")
 
 
 def testar_todos_algoritmos(algoritmos, vetores):
